@@ -1,172 +1,71 @@
-## 1. Prompt Submission
+# Epic 1: Core Functionality
 
-### Story:
- As a user, I want to enter a text prompt and select models, so I can compare different model outputs.
+## Story 1: Prompt Submission & Model Selection
+**As a user, I want to enter a text prompt and select models to compare their outputs.**
 
 ### Acceptance Criteria:
 - The prompt input field accepts a minimum of 2000 characters
 - Character count is displayed and updates in real-time
-- Empty prompt submission is prevented with a helpful validation message
-- The prompt text persists after page refresh using local storage
-- User can clear the prompt with a single click of a "Clear" button
-- Placeholder text provides example prompts to help new users
-- The system preserves the last used prompt when navigating between pages
-- Each submission is timestamped and added to a history list
-
-### Model Selection Criteria:
+- Empty prompt submission is prevented with a validation message
 - Model selection uses checkboxes for intuitive multi-select
 - Maximum of 4 models can be selected at once
-- Attempting to select more than 4 models shows an explanatory message
-- Model list includes size information in a consistent format (MB/GB)
-- Models are grouped or filterable by type (general, code, small, large)
-- Selection persists after page refresh
-- Recently used models are visually indicated or sortable to the top
-- A prominent "Compare" button is disabled until at least one model is selected
+- Attempting to select more than 4 models shows an error message
+- Model list includes name and size information
+- A "Compare" button submits the form
 
-## 2. Output Comparison
+## Story 2: Basic Output Comparison
+**As a user, I want to see model outputs displayed with basic performance metrics.**
 
-### Story:
- As a user, I want to see outputs displayed side by side with performance metrics, so I can evaluate model differences.
-
-### Display Criteria:
-- Outputs use responsive layout: side-by-side on desktop, stacked on mobile
-- Each output card has consistent height/width on desktop
-- Long outputs have scrollable containers with fixed header
-- Output cards include model name, size, and parameter settings used
-- Cards include a timestamp of when the response was generated
+### Acceptance Criteria:
+- Outputs display in a clear, readable format
+- Multiple outputs are shown side-by-side on desktop and stacked on mobile
+- Each output card displays the model name
+- Cards include the response time in seconds
 - Text preserves all formatting from the model response
-- Code blocks are displayed with syntax highlighting appropriate to the language
-- Cards have clear visual separation and consistent styling
+- Results appear after submission without page reload
+- A loading indicator shows during generation
 
-### Performance Metrics Criteria:
-- Response time is displayed in seconds with two decimal precision
-- Start and end timestamps are shown for each generation
-- Progress indicator shows generation in progress
-- Response speed is visualized using a color scale (green=fast, red=slow)
-- If available, token count and tokens-per-second are displayed
-- Memory usage metrics are shown if the information is available
-- Relative performance between models is visualized with a simple bar chart
-- Results can be sorted by performance metrics
+## Story 3: Model Management
+**As a user, I want to see a simple list of my available models.**
 
-### Difference Highlighting Criteria:
-- A toggle switch enables/disables difference highlighting
-- Common text between all outputs is shown in normal styling
-- Text unique to one model is highlighted in model-specific color
-- Similar phrasings across models are indicated with lighter highlighting
-- Word-level and sentence-level difference modes are available
-- Highlighting preserves text readability (sufficient contrast)
-- A difference summary shows percentage of unique content per model
-- Users can click on highlighted sections to focus on specific differences
-
-## 3. Model Management
-
-### Story:
- As a user, I want to easily view and filter available models, so I can choose which to compare.
-
-### Model Listing Criteria:
-- Complete list of locally installed models is automatically loaded on page load
-- Each model entry shows: name, size, last modified date
-- A manual refresh button updates the model list
-- Models can be filtered by size ranges (<1GB, 1-5GB, 5GB+)
-- Models can be filtered by type using tags or categories
-- Search box allows filtering by model name
-- Recently used models appear at the top or are distinctly marked
-- Total count of available models is displayed
+### Acceptance Criteria:
+- All locally installed models are listed on the comparison page
+- Each model entry shows name and size
+- A refresh button updates the model list
 - Error message appears if Ollama service is unavailable
-- List updates automatically when new models are detected
 
-## 4. History and Storage
+# Epic 2: Enhancements (Post-MVP)
 
-### Story:
- As a user, I want to save, revisit, and manage my comparison history.
+## Story 4: History and Storage
+**As a user, I want to save my previous comparisons for future reference.**
 
-### Saving Criteria:
-- Each comparison can be saved with a single click
-- Optional title field defaults to truncated prompt text
-- Optional notes field allows for contextual information
-- Saved comparisons receive a unique identifier
-- Confirmation message appears when comparison is saved
-- Duplicate saves are prevented or user is notified
-- Save time and date are recorded
-- All comparison data is stored (prompt, models, outputs, metrics)
+### Acceptance Criteria:
+- Basic history functionality stores recent comparisons
+- History page shows previously run comparisons
+- Each history entry shows the prompt and models used
+- History persists across browser sessions using local storage
 
-### History Management Criteria:
-- History page shows minimum of 30 most recent comparisons
-- Each history entry shows: title, models used, date/time, preview of prompt
-- History can be sorted by date, title, or models used
-- History can be filtered by model or text search
-- Individual items can be deleted with confirmation
-- Bulk delete option is available with confirmation
-- History can be exported as JSON file
-- Exported history can be imported back into the application
-- History entries allow "rerun with same models" functionality
-- History entries allow "rerun with different models" functionality
-- Navigation between history and comparison views is seamless
+## Story 5: Basic Analysis Tools
+**As a user, I want to analyze basic model performance.**
 
-## 5. Analysis Tools
+### Acceptance Criteria:
+- Response times are displayed prominently
+- Simple export functionality for comparison results
+- Basic notes can be added to comparisons
 
-### Story:
- As a user, I want to analyze and share model performance for different use cases.
+## Story 6: Additional User Experience Improvements
+**As a user, I want an intuitive, responsive interface.**
 
-### Evaluation Criteria:
-- Each output can be rated on a 5-star scale
-- Rating summary shows average rating per model across all saved comparisons
-- User can add notes to individual outputs
-- User can categorize outputs with predefined or custom tags
-- Tags are searchable and can be used for filtering history
-- Feedback form captures structured information about output quality
-- Comparison page includes a "findings" section for overall notes
-- User can mark specific parts of responses as particularly good or problematic
+### Acceptance Criteria:
+- Interface works on both desktop and mobile
+- Basic dark mode support
+- Keyboard shortcuts for common actions
+- Character highlighting for differences between outputs
 
-### Export and Sharing Criteria:
-- Full comparison can be exported as JSON with a single click
-- Comparison can be exported as Markdown with proper formatting
-- Export includes all metadata (timing, models, parameters, ratings)
-- Share link functionality creates a local URL for sharing (if multi-user)
-- Export options include "with highlighting" or "plain text"
-- PDF export option with configurable formatting
-- Exported files use a consistent naming convention
-- Export action is confirmed with a success message and file information
+## Technical Requirements
 
-## 6. User Experience
-
-### Story:
- As a user, I want an intuitive, responsive interface that works on all devices.
-
-### Responsive Design Criteria:
-- Interface functions on screen sizes from 320px to 2560px
-- Layouts adapt appropriately: side-by-side on desktop, stacked on mobile/tablet
-- All interactive elements are properly sized for touch interfaces (min 44×44px)
-- Critical functions are accessible without horizontal scrolling on any device
-- Font sizes adjust appropriately for different screen sizes
-- Tables and data displays reformat for narrow screens
-- All functionality is available on both mobile and desktop
-- Performance remains smooth on lower-end devices
-
-### Theme Support Criteria:
-- Application detects and respects system dark/light mode preference
-- Manual theme toggle is available and prominently placed
-- Theme selection persists across sessions
-- All UI elements maintain proper contrast in both themes
-- Theme switching is immediate with no page reload required
-- Color blindness considerations are addressed in both themes
-- Text remains readable at all font sizes in both themes
-- Custom theme options allow personalization (if desired feature)
-
-## 7. Technical Performance
-
-### Story:
- As a user, I want a reliable, fast application that handles model interactions efficiently.
-
-### Performance Criteria:
-- Initial page load completes in under 3 seconds on average connections
-- Model list loads within 1 second
-- UI remains responsive during model processing
-- Streaming responses appear progressively when supported
-- Long-running model processes (>30s) provide progress updates
-- Application gracefully handles model timeouts with clear error messages
-- Failed requests can be retried without losing context
-- System automatically retries on common transient errors
-- Concurrent model processing is supported where Ollama allows
-- Application functions offline for viewing saved comparisons
-- Session data is preserved in case of browser crash or connection loss
+- Application loads and functions on your local MacBook without performance issues
+- Uses efficient API calls to Ollama
+- Gracefully handles errors from the Ollama API
+- Simple, clean UI that focuses on functionality over complex features
+- Minimal external dependencies to keep the application light

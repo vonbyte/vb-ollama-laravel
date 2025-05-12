@@ -2,7 +2,6 @@
 
 use App\Services\OllamaService;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Config;
 
 it('formats models correctly when listing', function () {
     Http::fake([

@@ -7,3 +7,4 @@ Route::get('/', function () {
 });
 
 Route::get('/ollama', \App\Http\Controllers\OllamaTestController::class);
+Route::post('/ollama/process', \App\Http\Controllers\OllamaTestController::class);

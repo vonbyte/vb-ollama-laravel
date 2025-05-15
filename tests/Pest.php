@@ -42,7 +42,12 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function simulateProcessedHttpResponse(): void
 {
-    // ..
+    Http::fake([
+        config('ollama-laravel.url') . "/api/generate" => Http::response([
+            'response' => 'Test response',
+            'total_duration' => 1500000000
+        ], 200),
+    ]);
 }

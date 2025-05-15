@@ -1,7 +1,6 @@
 <?php
 
 use App\Services\OllamaService;
-use Illuminate\Support\Facades\Http;
 
 it('formats models correctly when listing', function () {
     Http::fake([
@@ -21,14 +20,9 @@ it('formats models correctly when listing', function () {
     expect($result[0]['size'])->toBe('2.0 GB');
 });
 
-it('processes prompts with a single model', function () {
-    Http::fake([
-        config('ollama-laravel.url'). "/api/generate" => Http::response([
-            'response' => 'Test response',
-            'total_duration' => 1500000000
-        ], 200),
-    ]);
 
+it('processes prompts with a single model', function () {
+    simulateProcessedHttpResponse();
     $service = new OllamaService();
     $result = $service->processPrompt('Test prompt', ['llama3.2:3b']);
 
@@ -41,7 +35,7 @@ it('processes prompts with a single model', function () {
 
 it('handles API errors gracefully', function () {
     Http::fake([
-        config('ollama-laravel.url'). "/api/generate" => Http::response([
+        config('ollama-laravel.url') . "/api/generate" => Http::response([
             'error' => 'Model not found'
         ], 404)
     ]);
@@ -52,3 +46,68 @@ it('handles API errors gracefully', function () {
     expect($result['error'])->toBe('No response from model');
 
 });
+
+/**
+it('accepts prompts with the maximum allowed length of 2000 characters', function () {
+    simulateProcessedHttpResponse();
+
+    $service = new OllamaService();
+
+    $longprompt = str_repeat('a', 2000);
+
+    $result = $service->processPrompt($longprompt, ['llama3.2:3b']);
+
+    expect($result['success'])->toBeTrue();
+});
+
+it('rejects prompts exceeding the maximum allowed length', function () {
+    simulateProcessedHttpResponse();
+
+    $service = new OllamaService();
+
+    $tooLongPrompt = str_repeat('a', 2001);
+
+    $result = $service->processPrompt($tooLongPrompt, ['llama3.2:3b']);
+
+    expect($result['success'])->toBeFalse();
+    expect($result['error'])->toBe('No response from model');
+});
+
+it('rejects prompts with no models selected', function () {
+    $response = $this->post('/ollama/process', [
+        'prompt' => 'Test prompt'
+    ]);
+
+    $response->assertSessionHasErrors('models');
+    $response->assertSessionHasErrors(['models' => 'The model field is required.']);
+
+});
+
+it('rejects empty prompt submissions', function () {
+    $response = $this->post('/ollama/process', [
+        'prompt' => '',
+        'models' => ['llama3.2:3b']
+    ]);
+
+    $response->assertSessionHasErrors('prompt');
+    $response->assertSessionHasErrors(['prompt' => 'The prompt field is required.']);
+});
+
+it('rejects null prompt submissions', function () {
+    $response = $this->post('/ollama/process', [
+        'prompt' => null,
+        'models' => ['llama3.2:3b']
+    ]);
+
+    $response->assertSessionHasErrors('prompt');
+});
+
+it('rejects whitespace-only prompt submissions', function () {
+    $response = $this->post('/ollama/process', [
+        'prompt' => ' ',
+        'models' => ['llama3.2:3b']
+    ]);
+
+    $response->assertSessionHasErrors('prompt');
+});
+**/

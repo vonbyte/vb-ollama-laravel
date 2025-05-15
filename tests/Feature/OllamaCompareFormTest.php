@@ -3,7 +3,7 @@
 use App\Services\OllamaService;
 
 it('displays the model comparison form', function () {
-    // Mock the OllamaService to prevent actual API calls
+
     $this->mock(OllamaService::class, function ($mock) {
         $mock->shouldReceive('listModels')->once()->andReturn([]);
     });

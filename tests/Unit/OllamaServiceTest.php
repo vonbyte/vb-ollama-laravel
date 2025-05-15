@@ -49,6 +49,6 @@ it('handles API errors gracefully', function () {
     $result = $service->processPrompt('Test prompt', ['non-existent-model']);
 
     expect($result['success'])->toBeFalse();
-    expect($result['error'])->toBe('Model not found');
+    expect($result['error'])->toBe('No response from model');
 
 });

@@ -52,7 +52,6 @@ class OllamaService
 
                 $response = Ollama::model($model)
                     ->prompt($prompt)
-                    ->options($options)
                     ->ask();
 
                 $endTime = microtime(true);

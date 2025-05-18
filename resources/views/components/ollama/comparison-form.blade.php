@@ -1,13 +1,13 @@
 <form action="{{route('ollama.compare')}}" id="comparison-form" class="form" method="POST">
     @csrf
-    <x-form-group :label="__('Enter your prompt')" name="prompt">
+    <x-form-group :label="__('Enter your prompt')" name="prompt" id="prompt">
         <textarea class="form__textarea" name="prompt" id="prompt" rows="10"></textarea>
         <div class="form__counter">
             <span id="char-count">0</span>/2000
         </div>
     </x-form-group>
 
-    <x-form-group :label="__('Select models')" name="">
+    <x-form-group :label="__('Select models')" name="models" id="models">
         <div class="form__model-list">
             @forelse($models as $model)
                 <div class="form__model-item">

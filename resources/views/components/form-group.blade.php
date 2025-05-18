@@ -1,4 +1,5 @@
 @props([
+    'id' => '',
     'name' => '',
     'label' => '',
     'error' => null
@@ -6,7 +7,7 @@
 
 <div class="form__group">
     @if($label)
-        <x-form-label for="prompt" :value="$label"/>
+        <x-form-label for="{{$id}}" :value="$label"/>
     @endif
 
     {{$slot}}

@@ -1,4 +1,4 @@
 import './bootstrap';
-//import './ollama-comparison.js';
+import './ollama-comparison.js';
 
 

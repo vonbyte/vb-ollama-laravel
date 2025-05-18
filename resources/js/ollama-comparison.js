@@ -1,3 +1,4 @@
+import { marked } from 'marked';
 
 function getCookie (name) {
   const regex = new RegExp(`(^| )${name}=([^;]+)`);
@@ -25,9 +26,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     promptField.dispatchEvent(new Event('input'));
   }
+
   if (form) {
     form.addEventListener('submit', (event) => {
       event.preventDefault();
+      if (resultsGrid) {
+        resultsGrid.innerHTML = "";
+      }
 
       if (submitButton) {submitButton.disabled = true;}
       if (loader) {loader.style.display = 'inline-block';}
@@ -45,6 +50,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         .then(response => response.json())
         .then(data => {
           if (data.success && resultsGrid && resultsContainer) {
+
             data.results.forEach((result) => {
               const card = document.createElement('div');
               card.className = 'result-card';
@@ -59,13 +65,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 timeClass += ' result-card__time--medium';
               }
 
+              const markdownRenderer = window.marked || marked;
+              const markdownContent = renderMarkdown(result.response, markdownRenderer);
+
               card.innerHTML = `
                 <div class="result-card__header">
-                    <h3 class="result-card__title">${result.model}</h3>
-                    <span class="${timeClass}">${duration}</span>
+                    <h3 class="result-card__title">${escapeHTML(result.model)}</h3>
+                    <span class="${timeClass}">${duration}s</span>
                 </div> 
                 <div>
-                    ${result.response.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}
+                    ${markdownContent}
                 </div>
               `;
 
@@ -91,3 +100,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 });
 
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHTML (html) {
+  const element = document.createElement('div');
+  element.textContent = html;
+  return element.innerHTML;
+}
+
+/**
+ * Render markdown content safely
+ */
+function renderMarkdown (markdown, renderer) {
+  try {
+    // Set options for marked (if needed)
+    const options = {
+      breaks: true, // Convert \n to <br>
+      gfm: true,    // GitHub Flavored Markdown
+      headerIds: false // Don't add ids to headers (for security)
+    };
+
+    // Render the markdown
+    return renderer.parse(markdown, options);
+  } catch (error) {
+    console.error('Error rendering markdown:', error);
+    // Fallback to simple HTML escape if markdown rendering fails
+    return escapeHTML(markdown).replace(/\n/g, '<br>');
+  }
+}

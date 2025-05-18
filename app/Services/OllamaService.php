@@ -19,7 +19,9 @@ class OllamaService
     {
         try {
             $response = Ollama::models();
+
             $models = $response['models'] ?? [];
+
             return array_map(function ($model) {
 
                 $modified = $model['modified_at'] ?? null;

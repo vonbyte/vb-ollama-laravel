@@ -5,10 +5,12 @@ use App\Services\OllamaService;
 it('displays the model comparison form', function () {
 
     $this->mock(OllamaService::class, function ($mock) {
-        $mock->shouldReceive('listModels')->once()->andReturn([]);
+        $mock->shouldReceive('listModels')
+            ->once()
+            ->andReturn([]);
     });
 
-    $response = $this->get('/compare');
+    $response = $this->get('/ollama');
     $response
         ->assertStatus(200)
         ->assertSee('Enter your prompt')
@@ -27,7 +29,7 @@ it('shows all available models', function () {
         $mock->shouldReceive('listModels')->once()->andReturn($mockModels);
     });
 
-    $response = $this->get('/compare');
+    $response = $this->get('/ollama');
 
     $response
         ->assertSee($mockModels[0]['name'])
@@ -39,15 +41,14 @@ it('shows all available models', function () {
 });
 
 it('requires a prompt', function () {
-    $response = $this->post('/compare', [
+    $response = $this->post('/ollama', [
         'models' => ['smollm2:135m']
     ]);
-
     $response->assertSessionHasErrors(['prompt']);
 });
 
 it('limits model selection to maximum 4', function () {
-    $response = $this->post('/compare', [
+    $response = $this->post('/ollama', [
         'prompt' => 'Exampleprompt',
         'models' => ['model1', 'model2', 'model3', 'model4', 'model5']
     ]);
@@ -55,7 +56,7 @@ it('limits model selection to maximum 4', function () {
     $response->assertSessionHasErrors(['models']);
 });
 
-it('processes form submission successfully', function () {
+it('redirects with flash data for regular form submissions', function () {
     $mockResult = [
         'success' => true,
         'results' => [
@@ -70,16 +71,42 @@ it('processes form submission successfully', function () {
     $this->mock(OllamaService::class, function ($mock) use ($mockResult) {
         $mock->shouldReceive('processPrompt')
             ->once()
-            ->with('Test prompt', ['llama3.2:3b'])
             ->andReturn($mockResult);
     });
 
-    $response = $this->post('/process', [
+    $response = $this->post('/ollama', [
+        'prompt' => 'Test prompt',
+        'models' => ['llama3.2:3b']
+    ]);
+
+    $response->assertRedirect()
+        ->assertSessionHas('success')
+        ->assertSessionHas('results');
+});
+
+it('returns JSON repsonse for AJAX requests', function () {
+    $mockResult = [
+        'success' => true,
+        'results' => [
+            [
+                'model' => 'llama3.2:3b',
+                'response' => 'Test response',
+                'total_duration' => 1.5,
+            ]
+        ]
+    ];
+    $this->mock(OllamaService::class, function ($mock) use ($mockResult) {
+        $mock->shouldReceive('processPrompt')
+            ->once()
+            ->andReturn($mockResult);
+    });
+
+    $response = $this->json('POST', '/ollama', [
         'prompt' => 'Test prompt',
         'models' => ['llama3.2:3b']
     ]);
 
     $response->assertStatus(200)
         ->assertJson(['success' => true])
-        ->assertJsonPath(['results.0.model' => 'llama3.2:3b']);
+        ->assertJsonPath('results.0.model', 'llama3.2:3b');
 });

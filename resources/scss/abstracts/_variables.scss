@@ -12,6 +12,12 @@
   --color-border: rgba(255, 255, 255, 0.12);
   --color-error: #ff5252;
 
+
+  --color-link: var(--color-primary-dark);
+  --color-link-hover: var(--color-primary-light);
+  --color-link-active: var(--color-primary-light);
+
+
   // Typography
   --font-family: 'Poppins', -apple-system, sans-serif;
   --font-size-sm: 0.875rem;
@@ -20,8 +26,8 @@
   --font-size-xl: 1.5rem;
   --font-size-xxl: 2rem;
 
-  --font-weight-normal: 400;
-  --font-weight-medium: 500;
+  --font-weight-normal: 300;
+  --font-weight-medium: 400;
   --font-weight-semibold: 600;
 
   // Spacing

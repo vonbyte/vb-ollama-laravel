@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     <h3 class="result-card__title">${escapeHTML(result.model)}</h3>
                     <span class="${timeClass}">${duration}s</span>
                 </div> 
-                <div>
+                <div class="result-card__content">
                     ${markdownContent}
                 </div>
               `;

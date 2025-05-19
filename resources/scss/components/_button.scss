@@ -1,0 +1,24 @@
+.button {
+  display: inline-block;
+  padding: var(--space-2) var(--space-6);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  &__primary {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+    &:hover {
+      background-color: var(--color-primary-light);
+    }
+    &:active {
+      background-color: var(--color-primary-dark);
+    }
+  }
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

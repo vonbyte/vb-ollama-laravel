@@ -1,5 +1,15 @@
 .form {
+  &__header {
+    margin-bottom: var(--space-4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
+    &-title {
+      font-weight: var(--font-weight-medium);
+      color: var(--color-text-secondary);
+    }
+  }
 }
 
 .form-group {
@@ -58,6 +68,7 @@
       grid-template-columns: repeat(2, 1fr);
     }
   }
+
   &__model-item {
     display: flex;
     align-items: flex-start;

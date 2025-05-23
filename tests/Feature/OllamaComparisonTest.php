@@ -139,13 +139,13 @@ it('processes a prompt with multiple models', function () {
 
         $mock->shouldReceive('processPrompt')
             ->once()
-            ->with('Test Prompt', ['llama3.2:3b','gemma2:2b'])
+            ->with('Test Prompt', ['llama3.2:3b', 'gemma2:2b'])
             ->andReturn($mockResult);
     });
 
     $component = Livewire::test(OllamaComparison::class)
         ->set('prompt', 'Test Prompt')
-        ->set('selectedModels', ['llama3.2:3b','gemma2:2b'])
+        ->set('selectedModels', ['llama3.2:3b', 'gemma2:2b'])
         ->call('compare');
 
     $component
@@ -156,5 +156,46 @@ it('processes a prompt with multiple models', function () {
         ->assertSee('Test response 2')
         ->assertSee('1.50s')
         ->assertSee('1.70s');
+
+});
+
+it('refreshes the model list', function () {
+    $initialModelList = [
+        [
+            'name' => 'llama3.2:3b',
+            'size' => '2.0 GB',
+        ]
+    ];
+
+    $newModelList = [
+        [
+            'name' => 'llama3.2:3b',
+            'size' => '2.0 GB',
+        ],
+        [
+            'name' => 'deepseek-r1:1.5b',
+            'size' => '1.1 GB',
+        ]
+    ];
+
+    $this->mock(OllamaService::class, function ($mock) use ($initialModelList) {
+        $mock->shouldReceive('listModels')
+            ->once()
+            ->andReturn($initialModelList);
+    });
+
+    $component = Livewire::test(OllamaComparison::class);
+    $component->assertSee($initialModelList[0]['name'])
+        ->assertDontSee('deepseek-r1:1.5b');;
+
+    $this->mock(OllamaService::class, function ($mock) use ($newModelList) {
+        $mock->shouldReceive('listModels')
+            ->once()
+            ->andReturn($newModelList);
+    });
+
+    $component->call('refreshModels');
+    $component->assertSee($newModelList[0]['name'])
+        ->assertSee($newModelList[1]['name']);
 
 });

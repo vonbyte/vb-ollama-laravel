@@ -1,5 +1,6 @@
 <div>
-    <form wire:submit="compare" class="form">
+
+    <form wire:submit="compare;" class="form">
         <x-form-group :label="__('Enter your prompt')" name="prompt" id="prompt">
             <textarea
                     wire:model.live="prompt"
@@ -14,6 +15,20 @@
         </x-form-group>
 
         <x-form-group :label="__('Select models')" name="models" id="models">
+            <div class="form__header">
+                <span class="form__header-title">{{__('Available Models')}}</span>
+                <x-secondary-button
+                        type="button"
+                        wire:loading.attr="disabled"
+                        wire:click="refreshModels"
+                        wire:target="refreshModels"
+                        title="{{__('Refresh model list')}}"
+                >
+                    <span wire:loading.remove wire:target="refreshModels">{{__('Refresh')}}</span>
+                    <span wire:loading wire:target="refreshModels">{{__('Refreshing')}}</span>
+
+                </x-secondary-button>
+            </div>
             <div class="form__model-list">
                 @forelse($models as $index => $model)
                     <div class="form__model-item">
@@ -43,7 +58,6 @@
 
     </form>
 
-    <!-- Add after the form -->
     @if($error)
         <div class="alert alert--error mt-4">
             {{ $error }}

@@ -11,6 +11,7 @@ class OllamaComparison extends Component
     public array $models = [];
     public array $results = [];
     public bool $loading = false;
+    public bool $refreshingModels = false;
     public ?string $error = null;
 
     #[Validate('required|array|max:4')]
@@ -33,6 +34,7 @@ class OllamaComparison extends Component
         $this->error = null;
         $this->loading = true;
 
+
         try {
             $response = $ollamaService
                 ->processPrompt($this->prompt, $this->selectedModels);
@@ -46,6 +48,13 @@ class OllamaComparison extends Component
         } finally {
             $this->loading = false;
         }
+    }
+
+    public function refreshModels(OllamaService $ollamaService)
+    {
+        $this->refreshingModels = true;
+        $this->models = $ollamaService->listModels();
+        $this->refreshingModels = false;
     }
 
     public function getCharCountProperty()

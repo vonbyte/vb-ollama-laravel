@@ -62,10 +62,4 @@
 - [ ] Keyboard shortcuts for common actions
 - [ ] Character highlighting for differences between outputs
 
-## Technical Requirements
 
-- [ ] Application loads and functions on your local MacBook without performance issues
-- [ ] Uses efficient API calls to Ollama
-- [ ] Gracefully handles errors from the Ollama API
-- [ ] Simple, clean UI that focuses on functionality over complex features
-- [ ] Minimal external dependencies to keep the application light

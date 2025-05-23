@@ -54,6 +54,7 @@ class OllamaService
                     ->prompt($prompt)
                     ->ask();
 
+
                 $endTime = microtime(true);
                 $duration = $endTime - $startTime;
 
@@ -62,6 +63,8 @@ class OllamaService
                         'model' => $model,
                         'response' => $response['response'],
                         'total_duration' => $this->extractDuration($response, $duration),
+                        'prompt_tokens' => $response['prompt_eval_count'] ?? null,
+                        'response_tokens' => $response['eval_count'] ?? null,
                     ];
                 } else {
                     $success = false;

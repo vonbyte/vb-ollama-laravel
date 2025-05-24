@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Services\OllamaHistoryService;
 use App\Services\OllamaService;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -32,7 +33,7 @@ class OllamaComparison extends Component
 
     }
 
-    public function compare(OllamaService $ollamaService)
+    public function compare(OllamaService $ollamaService, OllamaHistoryService $ollamaHistoryService)
     {
         $this->validate();
 
@@ -47,6 +48,11 @@ class OllamaComparison extends Component
 
             if ($response['success']) {
                 $this->results = $response['results'];
+               $ollamaHistoryService->saveComparison([
+                   'prompt' => $this->prompt,
+                   'models' => $this->selectedModels,
+                   'results' => $response['results']
+               ]);
             } else {
                 $this->error = $response['error'] ?? 'An error occurred while processing the prompt';
             }

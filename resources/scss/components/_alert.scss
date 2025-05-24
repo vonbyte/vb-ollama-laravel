@@ -4,7 +4,7 @@
   margin-top: var(--space-4);
 
   &--error {
-    background-color: rgba(var(--color-error), 0.1);
+    background-color: rgb(from var(--color-error) r g b / 0.1);
     color: var(--color-error);
   }
 

@@ -6,6 +6,7 @@ namespace App\Services;
 
 use Carbon\Carbon;
 use Cloudstudio\Ollama\Facades\Ollama;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Log;
 
 class OllamaService
@@ -15,6 +16,9 @@ class OllamaService
     {
     }
 
+    /**
+     * @throws GuzzleException
+     */
     public function listModels()
     {
         try {
@@ -36,7 +40,8 @@ class OllamaService
                 ];
             }, $models);
         } catch (\Exception $e) {
-            return [];
+            Log::error("Failed to list Ollama models: " . $e->getMessage());
+            throw new \Exception('Connection refused: Ollama service unavailable.');
         }
     }
 

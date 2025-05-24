@@ -199,3 +199,32 @@ it('refreshes the model list', function () {
         ->assertSee($newModelList[1]['name']);
 
 });
+
+it('shows an error when ollama service is not available during mount', function () {
+    $this->mock(OllamaService::class, function ($mock) {
+        $mock->shouldReceive('listModels')
+            ->andThrow(new Exception('Connection refused: Ollama service unavailable'));
+    });
+
+    $component = Livewire::test(OllamaComparison::class);
+    $component->assertSee('Ollama service unavailable')
+        ->assertSet('models', []);
+});
+
+it('shows an error when model refresh fails', function () {
+    $this->mock(OllamaService::class, function ($mock) {
+        $mock->shouldReceive('listModels')
+            ->once()
+            ->andReturn([['name' => 'test-model', 'size' => '2.0 GB']]);
+
+        $mock->shouldReceive('listModels')
+            ->once()
+            ->andThrow(new Exception('Connection refused: Ollama service unavailable'));
+    });
+
+    $component = Livewire::test(OllamaComparison::class);
+    $component->assertSee('test-model')
+        ->call('refreshModels')
+        ->assertSee('Ollama service unavailable');
+
+});

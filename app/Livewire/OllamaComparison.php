@@ -23,7 +23,13 @@ class OllamaComparison extends Component
 
     public function mount(OllamaService $ollamaService)
     {
-        $this->models = $ollamaService->listModels();
+        try {
+            $this->models = $ollamaService->listModels();
+        } catch (\Exception $e) {
+            $this->error = $e->getMessage();
+            $this->models = [];
+        }
+
     }
 
     public function compare(OllamaService $ollamaService)
@@ -53,8 +59,17 @@ class OllamaComparison extends Component
     public function refreshModels(OllamaService $ollamaService)
     {
         $this->refreshingModels = true;
-        $this->models = $ollamaService->listModels();
-        $this->refreshingModels = false;
+        try {
+            $this->models = $ollamaService->listModels();
+            if ($this->error && !$this->results) {
+                $this->error = null;
+            }
+        } catch (\Exception $e) {
+            $this->error = $e->getMessage();
+            $this->models = [];
+        } finally {
+            $this->refreshingModels = false;
+        }
     }
 
     public function getCharCountProperty()

@@ -16,13 +16,8 @@ class OllamaComparisonController
 
     public function compare(Request $request)
     {
-        $modelData = $this->ollamaService->listModels();
 
-        $models = $modelData ?? [];
-
-        return view('ollama.comparison', [
-            'models' => $models,
-        ]);
+        return view('ollama.comparison');
 
     }
 

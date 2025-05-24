@@ -59,8 +59,18 @@
     </form>
 
     @if($error)
-        <div class="alert alert--error mt-4">
-            {{ $error }}
+        <div class="alert alert--error">
+            <strong>{{__('Error')}}:</strong> {{$error}}
+            @if(str_contains($error, 'Connection') || str_contains($error,'connect'))
+                <div class="alert__help">
+                    <p>{{__('Please ensure:')}}</p>
+                    <ul>
+                        <li>{{__('Ollama service is running')}}</li>
+                        <li>{{__('Ollama service is accessible on the configured port')}}</li>
+                        <li>{{__('At least one model was installed')}}</li>
+                    </ul>
+                </div>
+            @endif
         </div>
     @endif
 

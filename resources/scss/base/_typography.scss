@@ -11,3 +11,11 @@ h1  {
 p {
   margin-bottom: var(--space-4);
 }
+
+pre {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-light)var(--color-surface);
+  background: var(--color-surface-light);
+  font-size: 0.9em;
+}

@@ -17,22 +17,22 @@
 **As a user, I want to see model outputs displayed with basic performance metrics.**
 
 ### Acceptance Criteria:
-- [ ] Outputs display in a clear, readable format
-- [ ] Multiple outputs are shown side-by-side on desktop and stacked on mobile
-- [ ] Each output card displays the model name
-- [ ] Cards include the response time in seconds
-- [ ] Text preserves all formatting from the model response
-- [ ] Results appear after submission without page reload
-- [ ] A loading indicator shows during generation
+- [x] Outputs display in a clear, readable format
+- [x] Multiple outputs are shown side-by-side on desktop and stacked on mobile
+- [x] Each output card displays the model name
+- [x] Cards include the response time in seconds
+- [x] Text preserves all formatting from the model response
+- [x] Results appear after submission without page reload
+- [x] A loading indicator shows during generation
 
 ## Story 3: Model Management
 **As a user, I want to see a simple list of my available models.**
 
 ### Acceptance Criteria:
-- [ ] All locally installed models are listed on the comparison page
-- [ ] Each model entry shows name and size
-- [ ] A refresh button updates the model list
-- [ ] Error message appears if Ollama service is unavailable
+- [x] All locally installed models are listed on the comparison page
+- [x] Each model entry shows name and size
+- [x] A refresh button updates the model list
+- [x] Error message appears if Ollama service is unavailable
 
 # Epic 2: Enhancements (Post-MVP)
 
@@ -62,10 +62,4 @@
 - [ ] Keyboard shortcuts for common actions
 - [ ] Character highlighting for differences between outputs
 
-## Technical Requirements
 
-- [ ] Application loads and functions on your local MacBook without performance issues
-- [ ] Uses efficient API calls to Ollama
-- [ ] Gracefully handles errors from the Ollama API
-- [ ] Simple, clean UI that focuses on functionality over complex features
-- [ ] Minimal external dependencies to keep the application light

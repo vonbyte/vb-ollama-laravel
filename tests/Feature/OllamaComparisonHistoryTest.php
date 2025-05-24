@@ -139,3 +139,26 @@ it('automatically saves comparison to history after successful processing', func
     $this->assertDatabaseHas('ollama_histories', ['prompt' => "Test prompt"]);
 
 });
+
+it('can add tags to a comparison', function () {
+    $comparisonData = [
+        'prompt' => "Test prompt",
+        'models' => ['gemma2:2b'],
+        'results' => [
+            [
+                'model' => 'gemma2:2b',
+                'response' => 'Test response 2',
+                'total_duration' => 1.7,
+                'response_tokens' => 42
+            ]
+        ],
+        'tags' => ['coding', 'python', 'beginner']
+    ];
+
+    $result = $this->historyService->saveComparison($comparisonData);
+     expect($result->tags)->toBe($comparisonData['tags']);
+     $this->assertDatabaseHas('ollama_histories', ['tags' => json_encode(['coding', 'python', 'beginner'])]);
+
+    expect(true)->toBeTrue();
+});
+

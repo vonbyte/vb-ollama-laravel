@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('prompt');
             $table->json('results');
             $table->json('models');
+            $table->json('tags');
             $table->timestamps();
         });
     }

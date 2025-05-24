@@ -19,6 +19,7 @@ class OllamaHistoryService
             'prompt' => $comparisonData['prompt'],
             'results' => $comparisonData['results'],
             'models' => $comparisonData['models'],
+            'tags' => $comparisonData['tags'] ?? []
         ]);
 
     }

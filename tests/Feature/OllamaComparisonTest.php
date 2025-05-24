@@ -86,6 +86,7 @@ it('processes a prompt with a single model', function () {
                 'model' => 'llama3.2:3b',
                 'response' => 'Test response',
                 'total_duration' => 1.5,
+                'response_tokens' => 42
             ]
         ],
         'error' => null
@@ -123,11 +124,13 @@ it('processes a prompt with multiple models', function () {
                 'model' => 'llama3.2:3b',
                 'response' => 'Test response',
                 'total_duration' => 1.5,
+                'response_tokens' => 42
             ],
             [
                 'model' => 'gemma2:2b',
                 'response' => 'Test response 2',
                 'total_duration' => 1.7,
+                'response_tokens' => 42
             ]
         ],
         'error' => null

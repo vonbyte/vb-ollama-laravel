@@ -44,6 +44,7 @@ class OllamaComparison extends Component
         try {
             $response = $ollamaService
                 ->processPrompt($this->prompt, $this->selectedModels);
+
             if ($response['success']) {
                 $this->results = $response['results'];
             } else {

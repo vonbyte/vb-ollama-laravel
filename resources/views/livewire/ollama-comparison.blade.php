@@ -14,6 +14,14 @@
             </div>
         </x-form-group>
 
+        <x-form-group :label="__('Add tags')" name="tags" id="tags">
+            <input type="text" wire:model="tags" placeholder="Add your tags (comma-separated)" />
+        </x-form-group>
+
+        <x-form-group :label="__('Enter your classification notes')" name="notes" id="notes">
+            <input type="text" max="255" wire:model="notes" placeholder="Add your notes (max 255 chars)" />
+        </x-form-group>
+
         <x-form-group :label="__('Select models')" name="models" id="models">
             <div class="form__header">
                 <span class="form__header-title">{{__('Available Models')}}</span>

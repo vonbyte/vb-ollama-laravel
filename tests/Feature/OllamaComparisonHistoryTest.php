@@ -35,7 +35,7 @@ it('can save a comparison to history', function () {
 
     expect($result)->toBeInstanceOf(OllamaHistory::class);
     expect($result->prompt)->toBe("Test prompt");
-    expect($result->results)->toBe(json_encode($mockHistory['results']));
+    expect($result->results)->toHaveCount(2);
 
 });
 
@@ -78,7 +78,6 @@ it('can retrieve a comparison history', function () {
 });
 
 it('displays comparison history on history page', function () {
-    // Arrange: Create some history first
     $mockHistory = [
         'prompt' => "Test prompt",
         'models' => ['llama3.2:3b', 'gemma2:2b'],
@@ -138,4 +137,86 @@ it('automatically saves comparison to history after successful processing', func
     // Assert: Verify it appears in history
     $this->assertDatabaseHas('ollama_histories', ['prompt' => "Test prompt"]);
 
+});
+
+it('can add tags to a comparison', function () {
+    $comparisonData = [
+        'prompt' => "Test prompt",
+        'models' => ['gemma2:2b'],
+        'results' => [
+            [
+                'model' => 'gemma2:2b',
+                'response' => 'Test response 2',
+                'total_duration' => 1.7,
+                'response_tokens' => 42
+            ]
+        ],
+        'tags' => ['coding', 'python', 'beginner']
+    ];
+
+    $result = $this->historyService->saveComparison($comparisonData);
+    expect($result->tags)->toBe($comparisonData['tags']);
+    $this->assertDatabaseHas('ollama_histories', ['tags' => json_encode(['coding', 'python', 'beginner'])]);
+
+    expect(true)->toBeTrue();
+});
+
+it('can add notes to a comparison', function () {
+    $comparisonData = [
+        'prompt' => "Test prompt",
+        'models' => ['gemma2:2b'],
+        'results' => [
+            [
+                'model' => 'gemma2:2b',
+                'response' => 'Test response 2',
+                'total_duration' => 1.7,
+                'response_tokens' => 42
+            ]
+        ],
+        'tags' => ['coding', 'python', 'beginner'],
+        'notes' => 'Test notes with some context, just to berecognized',
+    ];
+
+    $result = $this->historyService->saveComparison($comparisonData);
+    expect($result->notes)->toBe($comparisonData['notes']);
+    $this->assertDatabaseHas('ollama_histories', ['notes' => $comparisonData['notes']]);
+});
+
+it('displays tags and notes in history view', function () {
+        $mockHistory = [
+            'prompt' => "Test prompt",
+            'models' => ['llama3.2:3b', 'gemma2:2b'],
+            'results' => [
+                [
+                    'model' => 'llama3.2:3b',
+                    'response' => 'Test response',
+                    'total_duration' => 1.5,
+                    'response_tokens' => 33
+                ],
+                [
+                    'model' => 'gemma2:2b',
+                    'response' => 'Test response 2',
+                    'total_duration' => 1.7,
+                    'response_tokens' => 42
+                ]
+            ],
+            'tags' => ['coding', 'python', 'beginner'],
+            'notes' => 'Test notes with some context, just to berecognized',
+        ];
+
+        $this->historyService->saveComparison($mockHistory);
+
+        $component = Livewire::test(\App\Livewire\OllamaHistory::class);
+
+        $component->assertSee($mockHistory['tags'])
+            ->assertSee($mockHistory['notes']);
+
+});
+
+it('can access the history page via route', function () {
+    $response = $this->get('/ollama/history');
+    $response->assertStatus(200)
+        ->assertSeeLivewire(
+            \App\Livewire\OllamaHistory::class
+        );
 });

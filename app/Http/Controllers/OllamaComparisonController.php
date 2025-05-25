@@ -21,4 +21,9 @@ class OllamaComparisonController
 
     }
 
+    public function history(Request $request)
+    {
+        return view('ollama.history');
+    }
+
 }

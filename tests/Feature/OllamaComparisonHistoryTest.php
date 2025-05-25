@@ -212,3 +212,11 @@ it('displays tags and notes in history view', function () {
             ->assertSee($mockHistory['notes']);
 
 });
+
+it('can access the history page via route', function () {
+    $response = $this->get('/ollama/history');
+    $response->assertStatus(200)
+        ->assertSeeLivewire(
+            \App\Livewire\OllamaHistory::class
+        );
+});

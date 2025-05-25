@@ -11,6 +11,9 @@ class OllamaComparison extends Component
 {
     public array $models = [];
     public array $results = [];
+    public array $tags = [];
+    #[Validate('max:255')]
+    public ?string $notes = "";
     public bool $loading = false;
     public bool $refreshingModels = false;
     public ?string $error = null;
@@ -51,7 +54,9 @@ class OllamaComparison extends Component
                $ollamaHistoryService->saveComparison([
                    'prompt' => $this->prompt,
                    'models' => $this->selectedModels,
-                   'results' => $response['results']
+                   'results' => $response['results'],
+                   'tags' => $this->tags,
+                   'notes' => $this->notes,
                ]);
             } else {
                 $this->error = $response['error'] ?? 'An error occurred while processing the prompt';

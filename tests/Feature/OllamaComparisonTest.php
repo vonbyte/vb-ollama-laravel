@@ -231,3 +231,70 @@ it('shows an error when model refresh fails', function () {
         ->assertSee('Ollama service unavailable');
 
 });
+
+
+it('can add tags to a comparison via the interface', function () {
+    $this->mock(OllamaService::class, function ($mock) {
+        $mock->shouldReceive('listModels')
+            ->once()
+            ->andReturn([['name' => 'test-model', 'size' => '2.0 GB']]);
+
+        $mock->shouldReceive('processPrompt')
+            ->once()
+            ->andReturn([
+                'success' => true,
+                'results' => [
+                    [
+                        'model' => 'test-model',
+                        'response' => 'Test response',
+                        'total_duration' => 1.0,
+                        'response_tokens' => 42
+                    ]
+                ]
+            ]);
+    });
+
+    $component = Livewire::test(OllamaComparison::class);
+    $component->assertSee('tags');
+
+    $component->set('tags', ['coding', 'python', 'beginner'])
+        ->set('prompt', 'Test prompt')
+        ->set('selectedModels', ['test-model'])
+        ->call('compare');
+
+    $this->assertDatabaseHas('ollama_histories', ['tags' => json_encode(['coding', 'python', 'beginner'])]);
+});
+
+it('can add notes to a comparison via the interface', function () {
+    $this->mock(OllamaService::class, function ($mock) {
+        $mock->shouldReceive('listModels')
+            ->once()
+            ->andReturn([['name' => 'test-model', 'size' => '2.0 GB']]);
+
+        $mock->shouldReceive('processPrompt')
+            ->once()
+            ->andReturn([
+                'success' => true,
+                'results' => [
+                    [
+                        'model' => 'test-model',
+                        'response' => 'Test response',
+                        'total_duration' => 1.0,
+                        'response_tokens' => 42
+                    ]
+                ]
+            ]);
+    });
+
+    $component = Livewire::test(OllamaComparison::class);
+    $component->assertSee('notes');
+
+    $component->set('notes', 'Test notes with some context, just to be recognized')
+        ->set('prompt', 'Test prompt')
+        ->set('selectedModels', ['test-model'])
+        ->call('compare');
+
+    $this->assertDatabaseHas('ollama_histories', ['notes' => 'Test notes with some context, just to be recognized']);;
+});
+
+

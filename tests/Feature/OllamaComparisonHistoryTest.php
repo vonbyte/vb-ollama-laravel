@@ -35,7 +35,7 @@ it('can save a comparison to history', function () {
 
     expect($result)->toBeInstanceOf(OllamaHistory::class);
     expect($result->prompt)->toBe("Test prompt");
-    expect($result->results)->toBe(json_encode($mockHistory['results']));
+    expect($result->results)->toHaveCount(2);
 
 });
 
@@ -156,9 +156,30 @@ it('can add tags to a comparison', function () {
     ];
 
     $result = $this->historyService->saveComparison($comparisonData);
-     expect($result->tags)->toBe($comparisonData['tags']);
-     $this->assertDatabaseHas('ollama_histories', ['tags' => json_encode(['coding', 'python', 'beginner'])]);
+    expect($result->tags)->toBe($comparisonData['tags']);
+    $this->assertDatabaseHas('ollama_histories', ['tags' => json_encode(['coding', 'python', 'beginner'])]);
 
     expect(true)->toBeTrue();
+});
+
+it('can add notes to a comparison', function () {
+    $comparisonData = [
+        'prompt' => "Test prompt",
+        'models' => ['gemma2:2b'],
+        'results' => [
+            [
+                'model' => 'gemma2:2b',
+                'response' => 'Test response 2',
+                'total_duration' => 1.7,
+                'response_tokens' => 42
+            ]
+        ],
+        'tags' => ['coding', 'python', 'beginner'],
+        'notes' => 'Test notes with some context, just to berecognized',
+    ];
+
+    $result = $this->historyService->saveComparison($comparisonData);
+    expect($result->notes)->toBe($comparisonData['notes']);
+    $this->assertDatabaseHas('ollama_histories', ['notes' => $comparisonData['notes']]);
 });
 

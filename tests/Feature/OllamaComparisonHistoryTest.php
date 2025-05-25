@@ -78,7 +78,6 @@ it('can retrieve a comparison history', function () {
 });
 
 it('displays comparison history on history page', function () {
-    // Arrange: Create some history first
     $mockHistory = [
         'prompt' => "Test prompt",
         'models' => ['llama3.2:3b', 'gemma2:2b'],
@@ -183,3 +182,33 @@ it('can add notes to a comparison', function () {
     $this->assertDatabaseHas('ollama_histories', ['notes' => $comparisonData['notes']]);
 });
 
+it('displays tags and notes in history view', function () {
+        $mockHistory = [
+            'prompt' => "Test prompt",
+            'models' => ['llama3.2:3b', 'gemma2:2b'],
+            'results' => [
+                [
+                    'model' => 'llama3.2:3b',
+                    'response' => 'Test response',
+                    'total_duration' => 1.5,
+                    'response_tokens' => 33
+                ],
+                [
+                    'model' => 'gemma2:2b',
+                    'response' => 'Test response 2',
+                    'total_duration' => 1.7,
+                    'response_tokens' => 42
+                ]
+            ],
+            'tags' => ['coding', 'python', 'beginner'],
+            'notes' => 'Test notes with some context, just to berecognized',
+        ];
+
+        $this->historyService->saveComparison($mockHistory);
+
+        $component = Livewire::test(\App\Livewire\OllamaHistory::class);
+
+        $component->assertSee($mockHistory['tags'])
+            ->assertSee($mockHistory['notes']);
+
+});

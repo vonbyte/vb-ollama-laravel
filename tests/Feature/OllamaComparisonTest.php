@@ -298,3 +298,4 @@ it('can add notes to a comparison via the interface', function () {
 });
 
 
+

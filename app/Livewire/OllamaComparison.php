@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Services\OllamaHistoryService;
 use App\Services\OllamaService;
+use Illuminate\Support\Str;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -11,7 +12,7 @@ class OllamaComparison extends Component
 {
     public array $models = [];
     public array $results = [];
-    public array $tags = [];
+    public string $tags = '';
     #[Validate('max:255')]
     public ?string $notes = "";
     public bool $loading = false;
@@ -55,7 +56,7 @@ class OllamaComparison extends Component
                    'prompt' => $this->prompt,
                    'models' => $this->selectedModels,
                    'results' => $response['results'],
-                   'tags' => $this->tags,
+                   'tags' => explode(', ',$this->tags) ?? [],
                    'notes' => $this->notes,
                ]);
             } else {

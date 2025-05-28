@@ -21,6 +21,8 @@
 
     </div>
     <div class="result-card__content">
-        {!! $this->formattedModelResponse !!}
+        <div class="raw-content">
+            {!! $this->formattedModelResponse !!}
+        </div>
     </div>
 </div>

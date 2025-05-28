@@ -28,7 +28,10 @@ class OllamaModelResponse extends Component
 
     public function getFormattedModelResponseProperty()
     {
-        return Str::markdown($this->response);
+        // Handle line breaks properly for markdown
+        $text = preg_replace('/\n(?!\n)/', "  \n", $this->response); // Single \n becomes markdown break
+
+        return Str::markdown($text);
     }
 
 

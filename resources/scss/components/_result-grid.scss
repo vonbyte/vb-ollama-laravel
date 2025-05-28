@@ -1,6 +1,5 @@
 .results {
   margin-top: var(--space-8);
-  display: none;
 
   &__title {
     margin-bottom: var(--space-4);
@@ -13,6 +12,10 @@
 
     @media screen and (min-width: 768px) {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (min-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 }
@@ -35,6 +38,7 @@
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-medium);
     margin: 0;
+    color: var(--color-text);
   }
 
   &__time {
@@ -42,6 +46,7 @@
     border-radius: 9999px;
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
 
     &--fast {
       background: rgba(76, 175, 80, 0.1);
@@ -73,9 +78,11 @@
 
   &__content {
     padding: var(--space-4);
-    white-space: pre-wrap;
     overflow-wrap: break-word;
     line-height: 1.6;
+    .raw-content {
+      //white-space: pre-wrap;
+    }
   }
 }
 

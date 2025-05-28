@@ -70,7 +70,6 @@ class OllamaService
                         'prompt_tokens' => $response['prompt_eval_count'] ?? null,
                         'response_tokens' => $response['eval_count'] ?? null,
                     ];
-                    dd($results);
                 } else {
                     $success = false;
                     $error = 'No response from model';

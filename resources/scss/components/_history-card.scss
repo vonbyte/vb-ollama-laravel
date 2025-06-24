@@ -40,12 +40,9 @@
     }
   }
   &__results {
-    background: rgb(from var(--color-primary-light) r g b / 0.1);
-    padding: var(--space-2);
-    border-radius: var(--radius-sm);
-    display: flex;
+        display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: var(--space-4);
 
     .content-label {
       font-size: var(--font-size-sm);
@@ -53,5 +50,11 @@
       font-weight: var(--font-weight-medium);
       margin-bottom: var(--space-2);
     }
+  }
+  &__result-card {
+    background: rgb(from var(--color-primary-light) r g b / 0.1);
+    border-radius: var(--radius-sm);
+    padding: var(--space-2);
+
   }
 }

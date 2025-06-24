@@ -63,3 +63,29 @@ it('has input fields following the design system styling ', function () {
         ->assertSeeHtml('class="form__textarea');
 
 });
+
+it('display markdown consistently between live and history views', function () {
+    $this->historyService->saveComparison([
+        'prompt' => 'Test prompt',
+        'models' => ['test-model'],
+        'results' => [
+            [
+                'model' => 'test-model',
+                'response' => "Line 1\n\nLine 2 with **bold** text\n\n```\ncode block\n```",
+                'total_duration' => 1.5,
+                'response_tokens' => 50
+            ]
+        ],
+        'tags' => [],
+        'notes' => '',
+    ]);
+
+    $historyComponent = Livewire::test(\App\Livewire\OllamaHistory::class);
+
+    $historyComponent->assertSee("<strong>bold</strong>",false)
+        ->assertSee("<pre>",false)
+        ->assertSee('<p>', false)
+        ->assertDontSee('**bold**');
+
+
+});

@@ -1,5 +1,6 @@
 h1,h2,h3,h4,h5,h6 {
-  margin-bottom: var(--space-6);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-2);
   font-weight: var(--font-weight-medium);
 }
 
@@ -18,4 +19,11 @@ pre {
   scrollbar-color: var(--color-primary-light)var(--color-surface);
   background: var(--color-surface-light);
   font-size: 0.9em;
+}
+
+ul, ol {
+  margin-bottom: var(--space-4);
+  li {
+    margin-bottom: var(--space-2);
+  }
 }

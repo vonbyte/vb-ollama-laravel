@@ -3,6 +3,7 @@
 use App\Livewire\OllamaComparison;
 use App\Models\OllamaHistory;
 use App\Services\OllamaHistoryService;
+use App\Services\OllamaService;
 use Livewire\Livewire;
 use Mockery\MockInterface;
 
@@ -36,6 +37,52 @@ it('can save a comparison to history', function () {
     expect($result)->toBeInstanceOf(OllamaHistory::class);
     expect($result->prompt)->toBe("Test prompt");
     expect($result->results)->toHaveCount(2);
+
+});
+
+it('saves one comparison entry with multiple model results', function () {
+    $mockResult = [
+        'success' => true,
+        'results' => [
+            [
+                'model' => 'llama3.2:3b',
+                'response' => 'Test response',
+                'total_duration' => 1.5,
+                'response_tokens' => 42
+            ],
+            [
+                'model' => 'gemma2:2b',
+                'response' => 'Test response 2',
+                'total_duration' => 1.7,
+                'response_tokens' => 42
+            ]
+        ],
+        'error' => null
+    ];
+    $this->mock(OllamaService::class, function ($mock) use ($mockResult) {
+        $mock->shouldReceive('listModels')
+            ->once()
+            ->andReturn([]);
+        $mock->shouldReceive('processPrompt')
+            ->once()
+            ->with("Test prompt", ['llama3.2:3b', 'gemma2:2b'])
+            ->andReturn($mockResult);
+    });
+
+
+    expect(OllamaHistory::count())->toBe(0);
+
+    Livewire::test(OllamaComparison::class)
+        ->set('prompt', 'Test prompt')
+        ->set('selectedModels', ['llama3.2:3b', 'gemma2:2b'])
+        ->call('compare');
+
+    expect(OllamaHistory::count())->toBe(1);
+
+    $comparison = OllamaHistory::first();
+    expect($comparison->results)->toHaveCount(2);
+    expect($comparison->results[0]['model'])->toBe('llama3.2:3b');
+    expect($comparison->results[1]['model'])->toBe('gemma2:2b');
 
 });
 
@@ -108,7 +155,6 @@ it('displays comparison history on history page', function () {
 });
 
 it('automatically saves comparison to history after successful processing', function () {
-    // Arrange: Mock Ollama service to return results
     $mockResult = [
         'success' => true,
         'results' => [
@@ -128,13 +174,13 @@ it('automatically saves comparison to history after successful processing', func
             ->with('Test prompt', ['gemma2:2b'])
             ->andReturn($mockResult);
     });
-    // Act: Run a comparison through OllamaComparison component
+
     $component = Livewire::test(OllamaComparison::class)
         ->set('prompt', 'Test prompt')
         ->set('selectedModels', ['gemma2:2b'])
         ->call('compare');
 
-    // Assert: Verify it appears in history
+
     $this->assertDatabaseHas('ollama_histories', ['prompt' => "Test prompt"]);
 
 });

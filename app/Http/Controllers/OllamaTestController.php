@@ -35,7 +35,7 @@ class OllamaTestController extends Controller
 
         $response = Ollama::agent('You are a creative mentor helping developers with their coding questions, but also with their private everyday struggles.')
             ->prompt($string)
-            ->model('deepseek-r1:1.5b')
+            ->model('deepseek-r1:7b')
             ->options(['temperature' => 0.7])
             ->stream(false)
             ->ask();

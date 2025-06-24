@@ -13,16 +13,16 @@
                             @foreach($comparison->models as $model)
                                 <span class="model-badge">{{$model}}</span>
                             @endforeach
-                            <div>{{ implode(', ',$comparison->models)}}</div>
                         </div>
-                        @if($comparison->tags)
+
                         <div class="history-card__tags">
                             <span class="content-label">{{__('Tags')}}:</span>
-                            @foreach($comparison->tags as $tag)
+                            @forelse($comparison->tags as $tag)
                                 <span class="tag-badge">{{$tag}}</span>
-                            @endforeach
+                            @empty
+                                ---
+                            @endforelse
                         </div>
-                        @endif
 
 
                         @if($comparison->notes)

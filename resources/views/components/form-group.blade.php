@@ -11,7 +11,6 @@
     @endif
 
     {{$slot}}
-
         @if($error)
             <x-form-error class="form__error" :error="$error"/>
         @elseif($name && $errors->has($name))

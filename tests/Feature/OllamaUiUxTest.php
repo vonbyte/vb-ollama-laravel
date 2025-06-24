@@ -21,7 +21,7 @@ it('uses consistent design system classes on the history page', function () {
     $component->assertSee('result-card')
         ->assertSee('result-card__header')
         ->assertSee('result-card__content')
-        ->assertSee('result-grid')
+        ->assertSee('results__grid')
         ->assertSee($mockHistory->first()->prompt)
         ->assertSee($mockHistory->first()->notes);
 
@@ -50,5 +50,16 @@ it('uses consistent design system classes for the results content', function () 
 });
 
 it('has input fields following the design system styling ', function () {
+    $this->mock(OllamaService::class, function ($mock) {
+        $mock->shouldReceive('listModels')
+            ->once()
+            ->andReturn(['name' => 'test-model', 'size' => '2.0 GB']);
+    });
+    $component = Livewire::test(\App\Livewire\OllamaComparison::class);
+
+    $component->assertSee('form-group')
+        ->assertSee('form-label')
+        ->assertSeeHtml('class="form__input')
+        ->assertSeeHtml('class="form__textarea');
 
 });
